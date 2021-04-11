@@ -13,7 +13,7 @@ open class STTLibrary {
 	
 	// MARK: - Global Settings
 	
-	static let shared = STTLibrary()
+	public static let shared = STTLibrary()
 	
 	private let audioEngine = AVAudioEngine()
 	private var audioRecorder: AVAudioRecorder!
@@ -94,7 +94,7 @@ open class STTLibrary {
 			
 			speechRecogniser?.recognitionTask(with: speechRequest, resultHandler: { (result, error) in
 				if error != nil {
-					print("STTLibraryError:" + error!.localizedDescription)
+					print("STTLibraryError: " + error!.localizedDescription)
 					completion("")
 				} else {
 					if let transcription = result?.bestTranscription {
