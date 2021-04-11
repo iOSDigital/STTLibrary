@@ -112,7 +112,7 @@ open class STTLibrary {
 		
 	}
 	
-	public func stopRecording() {
+	public func stopRecognizing() {
 		print("STTLibrary: StopRecording")
 		self.audioEngine.inputNode.removeTap(onBus: 0)
 		self.audioEngine.stop()
