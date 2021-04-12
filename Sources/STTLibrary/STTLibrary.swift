@@ -8,6 +8,10 @@
 import AVFoundation
 import Speech
 
+public enum STTError: Error {
+	case AudioEngineError
+	case SpeechRecognizerError
+}
 
 open class STTLibrary {
 	
@@ -39,7 +43,7 @@ open class STTLibrary {
 	
 	public typealias CompletionHandler = (_:String) -> Void
 	public typealias ProgressHandler = (_:Float) -> Void
-	
+	public typealias Completion = (Result<String, STTError>) -> Void
 	
 	
 	// MARK: - Initialisation
