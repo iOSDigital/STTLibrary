@@ -25,14 +25,14 @@ On say, a button press, start the recognizing process:
 
 ```
 STT.startRecognizing { (result) in
-switch result {
-case .success(let string):
-// This is your speech to text result!
-print(string)
+	switch result {
+		case .success(let string):
+		// This is your speech to text result!
+		print(string)
 
-case .failure(let error):
-// Something went wrong :(
-print("Error: \(error)")
-}
+		case .failure(let error):
+		// Something went wrong :(
+		print("Error: \(error)")
+	}
 }
 ```
