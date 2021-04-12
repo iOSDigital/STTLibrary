@@ -24,7 +24,7 @@ Create a instance of the Shared Instance:
 On say, a button press, start the recognizing process:
 
 ```swift
-STT.startRecognizing { (result) in
+sstManager.startRecognizing { (result) in
 	switch result {
 		case .success(let string):
 		// This is your speech to text result!
