@@ -21,7 +21,7 @@ Just drop SSTLibrary.swift into your project.
 ## Usage
 Firstly, before you do anything, add the Microphone and Speech privacy entries into your app's info.plist!
 
-```swift
+```xml
 <key>NSSpeechRecognitionUsageDescription</key>
 <string>Need speech</string>
 <key>NSMicrophoneUsageDescription</key>
