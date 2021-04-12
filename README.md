@@ -7,7 +7,7 @@ A simple Swift package wrapper for SFSpeechRecognizer. Returns a string.
 Using Swift Package Manager, in Xcode:
 
 #### File > Swift Packages > Add Package Dependency
-https://github.com/iOSDigital/STTLibrary
+https://github.com/iOSDigital/STTLibrary.git
 
 #### Or manually
 Just drop SSTLibrary.swift into your project.
