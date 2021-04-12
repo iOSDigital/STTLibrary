@@ -15,11 +15,15 @@ Just drop SSTLibrary.swift into your project.
 ## Usage
 Once you have imported the module:
 
-``` import SSTLibrary.swift ```
+```swift
+import SSTLibrary.swift
+```
 
 Create a instance of the Shared Instance:
 
-``` let sstManager = SSTLibrary.shared ```
+```swift
+let sstManager = SSTLibrary.shared
+```
 
 On say, a button press, start the recognizing process:
 
