@@ -24,7 +24,7 @@ open class STTLibrary {
 	#if os(iOS)
 	private let audioSession = AVAudioSession.sharedInstance()
 	#endif
-	public var settings = [
+	public var audioSettings = [
 		AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
 		AVSampleRateKey: 22000,
 		AVNumberOfChannelsKey: 1,
@@ -41,7 +41,6 @@ open class STTLibrary {
 		return power
 	}
 	
-	public typealias CompletionHandler = (_:String) -> Void
 	public typealias ProgressHandler = (_:Float) -> Void
 	public typealias Completion = (Result<String, STTError>) -> Void
 	
@@ -67,7 +66,7 @@ open class STTLibrary {
 				try? self.audioSession.setCategory(.playAndRecord, mode: .default)
 				try? self.audioSession.setActive(true)
 			}else {
-				print("STTLibrary: Record permission not set")
+				print("STTLibrary: Record permission not allowed")
 			}
 		}
 		#endif
@@ -79,7 +78,7 @@ open class STTLibrary {
 	
 	
 	
-	public func startRecognizing(completion: @escaping CompletionHandler) {
+	public func startRecognizing(completion: @escaping Completion) {
 		
 		speechRequest = SFSpeechAudioBufferRecognitionRequest()
 		speechRequest.shouldReportPartialResults = false
@@ -92,18 +91,19 @@ open class STTLibrary {
 		audioEngine.prepare()
 		do {
 			try audioEngine.start()
-			audioRecorder = try AVAudioRecorder(url: recordLocation, settings: settings)
+			audioRecorder = try AVAudioRecorder(url: recordLocation, settings: audioSettings)
 			audioRecorder.isMeteringEnabled = true
 			audioRecorder.record()
 			
 			speechRecogniser?.recognitionTask(with: speechRequest, resultHandler: { (result, error) in
 				if error != nil {
 					print("STTLibraryError: " + error!.localizedDescription)
-					completion("")
+					self.stopRecognizing()
+					completion(.failure(.SpeechRecognizerError))
 				} else {
 					if let transcription = result?.bestTranscription {
 						print("STTLibraryResult : " + transcription.formattedString)
-						completion(transcription.formattedString)
+						completion(.success(transcription.formattedString))
 					}
 					
 				}
@@ -111,6 +111,8 @@ open class STTLibrary {
 			
 		}catch{
 			print("STTLibraryError: \(error.localizedDescription)")
+			stopRecognizing()
+			completion(.failure(.AudioEngineError))
 		}
 		
 		
@@ -135,7 +137,11 @@ open class STTLibrary {
 extension STTLibrary {
 	
 	var recordLocation: URL {
-		get { return FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("m4a") }
+		get {
+			let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("m4a")
+			print(url.path)
+			return url
+		}
 	}
 	
 }
