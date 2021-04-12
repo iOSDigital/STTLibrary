@@ -25,7 +25,7 @@ Once you have imported the module:
 import SSTLibrary.swift
 ```
 
-Create a instance of the Shared Instance:
+Create a global instance of the Shared Instance:
 
 ```swift
 let sstManager = SSTLibrary.shared
