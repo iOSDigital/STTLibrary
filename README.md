@@ -19,7 +19,7 @@ Just drop SSTLibrary.swift into your project.
 * Untested on tvOS, might work!
 
 ## Usage
-Firstly, before you do anything, add the Microphone and Speech privacy entries into your app's info.plist!
+Firstly, before you do anything, add the Microphone and Speech privacy entries into your app's info.plist, otherwise it will hard crash!
 
 ```xml
 <key>NSSpeechRecognitionUsageDescription</key>
@@ -31,7 +31,7 @@ Firstly, before you do anything, add the Microphone and Speech privacy entries i
 Then, once you have imported the module:
 
 ```swift
-import SSTLibrary.swift
+import SSTLibrary
 ```
 
 Create a global instance of the Shared Instance:
