@@ -23,7 +23,7 @@ Create a instance of the Shared Instance:
 
 On say, a button press, start the recognizing process:
 
-```
+```swift
 STT.startRecognizing { (result) in
 	switch result {
 		case .success(let string):
