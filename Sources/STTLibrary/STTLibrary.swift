@@ -13,12 +13,14 @@ public enum STTError: Error {
 	case SpeechRecognizerError
 }
 
+public struct SSTResult {
+	var string: String
+	var speechRecognitionResult: SFSpeechRecognitionResult?
+}
+
 open class STTLibrary {
 	
 	// MARK: - Global Settings
-	
-	public static let shared = STTLibrary()
-	
 	private let audioEngine = AVAudioEngine()
 	private var audioRecorder: AVAudioRecorder!
 	#if os(iOS)
@@ -33,6 +35,7 @@ open class STTLibrary {
 	
 	private let speechRecogniser = SFSpeechRecognizer()
 	private var speechRequest = SFSpeechAudioBufferRecognitionRequest()
+	private var reportPartialResults = false
 	
 	public var amplitude: Float {
 		audioRecorder.updateMeters()
@@ -42,12 +45,12 @@ open class STTLibrary {
 	}
 	
 	public typealias ProgressHandler = (_:Float) -> Void
-	public typealias Completion = (Result<String, STTError>) -> Void
+	public typealias Completion = (Result<SSTResult, STTError>) -> Void
 	
 	
 	// MARK: - Initialisation
 	
-	init() {
+	public init() {
 		SFSpeechRecognizer.requestAuthorization { (authStatus) in
 			switch authStatus {
 				case .authorized:
@@ -71,17 +74,19 @@ open class STTLibrary {
 		}
 		#endif
 		
-		speechRequest.shouldReportPartialResults = false
-		speechRequest.taskHint = .dictation
 	}
 	
+	public init(reportPartialResults: Bool = false) {
+		self.reportPartialResults = reportPartialResults
+	}
 	
 	
 	
 	public func startRecognizing(completion: @escaping Completion) {
 		
 		speechRequest = SFSpeechAudioBufferRecognitionRequest()
-		speechRequest.shouldReportPartialResults = false
+		speechRequest.shouldReportPartialResults = self.reportPartialResults
+		speechRequest.taskHint = .dictation
 		let speechNode = audioEngine.inputNode
 		let speechFormat = speechNode.outputFormat(forBus: 0)
 		speechNode.installTap(onBus: 0, bufferSize: 1024, format: speechFormat) { (buffer, time) in
@@ -102,10 +107,12 @@ open class STTLibrary {
 					completion(.failure(.SpeechRecognizerError))
 				} else {
 					if let transcription = result?.bestTranscription {
-						print("STTLibraryResult : " + transcription.formattedString)
-						completion(.success(transcription.formattedString))
+						let sstResult = SSTResult(string: transcription.formattedString, speechRecognitionResult: result)
+						completion(.success(sstResult))
+					} else {
+						let sstResult = SSTResult(string: "", speechRecognitionResult: nil)
+						completion(.success(sstResult))
 					}
-					
 				}
 			})
 			
@@ -119,7 +126,6 @@ open class STTLibrary {
 	}
 	
 	public func stopRecognizing() {
-		print("STTLibrary: StopRecording")
 		self.audioEngine.inputNode.removeTap(onBus: 0)
 		self.audioEngine.stop()
 		self.speechRequest.endAudio()
