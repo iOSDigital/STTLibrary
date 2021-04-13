@@ -129,7 +129,9 @@ open class STTLibrary {
 		self.audioEngine.inputNode.removeTap(onBus: 0)
 		self.audioEngine.stop()
 		self.speechRequest.endAudio()
-		audioRecorder.stop()
+		if audioRecorder != nil {
+			audioRecorder.stop()
+		}
 	}
 	
 	
