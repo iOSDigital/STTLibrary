@@ -84,8 +84,6 @@ open class STTLibrary {
 		self.reportPartialResults = reportPartialResults
 	}
 	
-	
-	
 	public func startRecognizing(completion: @escaping Completion) {
 		
 		speechRequest = SFSpeechAudioBufferRecognitionRequest()
@@ -137,11 +135,6 @@ open class STTLibrary {
 			audioRecorder.stop()
 		}
 	}
-	
-	
-	
-	
-	
 	
 }
 
