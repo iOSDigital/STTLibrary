@@ -14,8 +14,8 @@ public enum STTError: Error {
 }
 
 public class SSTResult {
-	var string: String
-	var speechRecognitionResult: SFSpeechRecognitionResult?
+	public var string: String
+	public var speechRecognitionResult: SFSpeechRecognitionResult?
 	init(withString: String, result: SFSpeechRecognitionResult?) {
 		string = withString
 		speechRecognitionResult = result
